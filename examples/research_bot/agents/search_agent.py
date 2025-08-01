@@ -1,6 +1,10 @@
 from agents import Agent, WebSearchTool
 from agents.model_settings import ModelSettings
 
+from .config import MODEL_NAME, DEFAULT_MODEL_SETTINGS, get_model_structure,web_search
+
+
+
 INSTRUCTIONS = (
     "You are a research assistant. Given a search term, you search the web for that term and "
     "produce a concise summary of the results. The summary must be 2-3 paragraphs and less than 300 "
@@ -13,6 +17,8 @@ INSTRUCTIONS = (
 search_agent = Agent(
     name="Search agent",
     instructions=INSTRUCTIONS,
-    tools=[WebSearchTool()],
-    model_settings=ModelSettings(tool_choice="required"),
+    tools=[web_search],
+    # model_settings=ModelSettings(tool_choice="required"),
+    model = MODEL_NAME,
+    model_settings=DEFAULT_MODEL_SETTINGS,
 )

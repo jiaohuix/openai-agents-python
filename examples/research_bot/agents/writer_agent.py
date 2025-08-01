@@ -2,6 +2,8 @@
 from pydantic import BaseModel
 
 from agents import Agent
+from .config import MODEL_NAME, DEFAULT_MODEL_SETTINGS, get_model_structure
+
 
 PROMPT = (
     "You are a senior researcher tasked with writing a cohesive report for a research query. "
@@ -11,6 +13,8 @@ PROMPT = (
     "flow of the report. Then, generate the report and return that as your final output.\n"
     "The final output should be in markdown format, and it should be lengthy and detailed. Aim "
     "for 5-10 pages of content, at least 1000 words."
+    "IMPORTANT: Always respond in the same language as the original query. Match the "
+    "language of the user's input exactly."
 )
 
 
@@ -25,9 +29,15 @@ class ReportData(BaseModel):
     """Suggested topics to research further"""
 
 
+output_structure = get_model_structure(ReportData)
+print("output_structure",output_structure)
+PROMPT += "\n\nRequired JSON structure:\n" + output_structure
+
 writer_agent = Agent(
     name="WriterAgent",
     instructions=PROMPT,
-    model="o3-mini",
+    # model="o3-mini",
+    model = MODEL_NAME,
+    model_settings=DEFAULT_MODEL_SETTINGS,
     output_type=ReportData,
 )
